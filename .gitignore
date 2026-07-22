@@ -1,0 +1,7 @@
+*.pdf
+*.exe
+*.sim
+*.ip_user_files
+*.hw
+*.cache
+
