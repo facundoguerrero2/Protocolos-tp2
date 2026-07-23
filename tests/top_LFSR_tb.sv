@@ -1,21 +1,21 @@
 `default_nettype none
 `timescale 1ns/1ns
 
-module top_LSFR_tb();
+module top_LFSR_tb();
 
     localparam PERIODO_CLK = 10;
     localparam SEED = 16'hFFFF;
-    localparam NB_LSFR = 16;
+    localparam NB_LFSR = 16;
 
     reg                     i_enable;
     reg                     i_rst;
     reg                     i_soft_reset;
-    reg [NB_LSFR-1:0]       i_seed;
+    reg [NB_LFSR-1:0]       i_lfsr;
     reg                     clock;
     reg                     clock_en;  
    
-    wire [NB_LSFR-1:0]        LFSR;
-    wire                    i_valid; // cable interno que conecta el valid_generator con el top_LSFR
+    wire [NB_LFSR-1:0]        LFSR;
+    wire                    i_valid; // cable interno que conecta el valid_generator con el top_LFSR
 
 
     
@@ -31,10 +31,10 @@ module top_LSFR_tb();
 
     assign i_valid = valid_signal;
 
-    top_LSFR #(
+    top_LFSR #(
         .SEED(SEED),
         .CYCLES(5)
-    ) u_top_LSFR (
+    ) u_top_LFSR (
         .i_enable(i_enable),
         .i_rst(i_rst),
         .i_soft_reset(i_soft_reset),
@@ -91,7 +91,7 @@ module top_LSFR_tb();
     
     task set_seed();
         begin
-            i_seed = $urandom_range(1, 2**NB_LSFR-1); //numero random de 16 bits para el puerto de seed
+            i_seed = $urandom_range(1, 2**NB_LFSR-1); //numero random de 16 bits para el puerto de seed
             #1; 
             $display("Puerto de Seed seteado a: %h", i_seed);
         end
@@ -103,8 +103,8 @@ module top_LSFR_tb();
 
     `define TEST1
         
-    `ifdef tb_random_generating
-        `include "./tb_random_generating.sv"
+    `ifdef TEST_RAND_GENERATING
+        `include "./TEST_RAND_GENERATING.sv"
     `endif
 
     `ifdef TEST1

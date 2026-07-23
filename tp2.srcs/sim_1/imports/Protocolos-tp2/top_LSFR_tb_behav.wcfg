@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="top_LSFR_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="top_LSFR_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="848,852.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="848,915.601 ns"></ZoomEndTime>
+      <Cursor1Time time="848,905.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="140"></NameColumnWidth>
+      <ValueColumnWidth column_width="100"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="12" />
+   <wvobject type="logic" fp_name="/top_LSFR_tb/i_enable">
+      <obj_property name="ElementShortName">i_enable</obj_property>
+      <obj_property name="ObjectShortName">i_enable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/top_LSFR_tb/clock">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/top_LSFR_tb/u_top_LSFR/u_LSFR/i_valid">
+      <obj_property name="ElementShortName">i_valid</obj_property>
+      <obj_property name="ObjectShortName">i_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_LSFR_tb/valid_wait_cycles">
+      <obj_property name="ElementShortName">valid_wait_cycles[31:0]</obj_property>
+      <obj_property name="ObjectShortName">valid_wait_cycles[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/top_LSFR_tb/clock_en">
+      <obj_property name="ElementShortName">clock_en</obj_property>
+      <obj_property name="ObjectShortName">clock_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/top_LSFR_tb/i_soft_reset">
+      <obj_property name="ElementShortName">i_soft_reset</obj_property>
+      <obj_property name="ObjectShortName">i_soft_reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_LSFR_tb/LFSR">
+      <obj_property name="ElementShortName">LFSR[15:0]</obj_property>
+      <obj_property name="ObjectShortName">LFSR[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_LSFR_tb/expected_LFSR">
+      <obj_property name="ElementShortName">expected_LFSR[15:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_LFSR[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_LSFR_tb/u_top_LSFR/u_LSFR/i_seed">
+      <obj_property name="ElementShortName">i_seed[15:0]</obj_property>
+      <obj_property name="ObjectShortName">i_seed[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_LSFR_tb/PERIODO_CLK">
+      <obj_property name="ElementShortName">PERIODO_CLK[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PERIODO_CLK[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_LSFR_tb/SEED">
+      <obj_property name="ElementShortName">SEED[15:0]</obj_property>
+      <obj_property name="ObjectShortName">SEED[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/top_LSFR_tb/NB_LSFR">
+      <obj_property name="ElementShortName">NB_LSFR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NB_LSFR[31:0]</obj_property>
+   </wvobject>
+</wave_config>

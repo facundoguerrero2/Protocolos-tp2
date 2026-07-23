@@ -91,23 +91,19 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/rtl/LSFR.v">
+      <File Path="$PSRCDIR/sources_1/imports/rtl/LSFR.v">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/rtl/LSFR.v"/>
+          <Attr Name="ImportTime" Val="1784761933"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/rtl/top_LSFR.v">
+      <File Path="$PSRCDIR/sources_1/imports/rtl/top_LSFR.v">
         <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/rtl/valid_generator.v">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/rtl/top_LSFR.v"/>
+          <Attr Name="ImportTime" Val="1784764327"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -121,8 +117,10 @@
     </FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">
       <Filter Type="Constrs"/>
-      <File Path="$PPRDIR/constraint/Arty-A7-35-Master.xdc">
+      <File Path="$PSRCDIR/constrs_1/imports/constraint/Arty-A7-35-Master.xdc">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/constraint/Arty-A7-35-Master.xdc"/>
+          <Attr Name="ImportTime" Val="1782950451"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
         </FileInfo>
@@ -133,51 +131,55 @@
     </FileSet>
     <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1" RelGenDir="$PGENDIR/sim_1">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/tests/TEST1.sv">
+      <File Path="$PSRCDIR/sim_1/imports/Protocolos-tp2/tests/TEST1.sv">
         <FileInfo SFType="VHeader">
+          <Attr Name="ImportPath" Val="$PPRDIR/tests/TEST1.sv"/>
+          <Attr Name="ImportTime" Val="1784765272"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
           <Attr Name="IsVisible" Val="1"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/tests/valid_generator.sv">
+      <File Path="$PSRCDIR/sim_1/imports/Protocolos-tp2/tests/valid_generator.sv">
         <FileInfo SFType="VHeader">
+          <Attr Name="ImportPath" Val="$PPRDIR/tests/valid_generator.sv"/>
+          <Attr Name="ImportTime" Val="1784767939"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
           <Attr Name="IsVisible" Val="1"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/tests/top_LSFR_tb.sv">
+      <File Path="$PSRCDIR/sim_1/imports/Protocolos-tp2/tests/top_LSFR_tb.sv">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/tests/top_LSFR_tb.sv"/>
+          <Attr Name="ImportTime" Val="1784821173"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/tests/TEST2.sv">
+      <File Path="$PSRCDIR/sim_1/imports/Protocolos-tp2/tests/TEST2.sv">
         <FileInfo SFType="VHeader">
           <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/tests/TEST2.sv"/>
+          <Attr Name="ImportTime" Val="1784765431"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
           <Attr Name="IsVisible" Val="1"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/tests/tb_random_generating.sv">
-        <FileInfo SFType="VHeader">
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-          <Attr Name="IsVisible" Val="1"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/top_LSFR_tb_behav.wcfg">
+      <File Path="$PSRCDIR/sim_1/imports/Protocolos-tp2/top_LSFR_tb_behav.wcfg">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/top_LSFR_tb_behav.wcfg"/>
+          <Attr Name="ImportTime" Val="1784765710"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/tests/TEST3.sv">
+      <File Path="$PSRCDIR/sim_1/imports/Protocolos-tp2/tests/TEST3.sv">
         <FileInfo SFType="VHeader">
           <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/tests/TEST3.sv"/>
+          <Attr Name="ImportTime" Val="1784000182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
           <Attr Name="IsVisible" Val="1"/>
