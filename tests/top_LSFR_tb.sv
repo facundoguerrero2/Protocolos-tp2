@@ -15,9 +15,21 @@ module top_LSFR_tb();
     reg                     clock_en;  
    
     wire [NB_LSFR-1:0]        LFSR;
-    wire                    i_valid_monitor; // cable interno que conecta el valid_generator con el top_LSFR
+    wire                    i_valid; // cable interno que conecta el valid_generator con el top_LSFR
 
 
+    
+    // Parámetros y registros del generador de valid
+
+    parameter MIN_WAIT = 1;  // Mínima cantidad de ciclos a esperar
+    parameter MAX_WAIT = 10; // Máxima cantidad de ciclos a esperar
+    parameter DEFAULT_WAIT_CYCLES = 1;
+    reg [31:0] valid_wait_cycles = 1;  // Variable que guarda el tiempo de espera actual
+    reg valid_random_cycles = 0; //flag para habilitar/deshabilitar la aleatoriedad en i_valid
+    reg [31:0] valid_cicle_counter;      // Contador de ciclos
+    reg valid_signal;            // señal para conectar al módulo
+
+    assign i_valid = valid_signal;
 
     top_LSFR #(
         .SEED(SEED),
@@ -29,7 +41,7 @@ module top_LSFR_tb();
         .i_seed(i_seed),
         .clock(clock),
         .o_LFSR(LFSR),
-        .i_valid_monitor(i_valid_monitor)
+        .i_valid(i_valid)
     );
 
     
@@ -85,17 +97,18 @@ module top_LSFR_tb();
         end
     endtask
 
-    `include valid_generator.sv
+    `include "./valid_generator.sv"
 
     
 
-    `define tb_random_generating
+    `define TEST1
         
     `ifdef tb_random_generating
         `include "./tb_random_generating.sv"
     `endif
 
     `ifdef TEST1
+        
         `include "./TEST1.sv"
     `endif
 

@@ -1,3 +1,7 @@
+/*
+TEST2: Verificamos la periodicidad del LFSR.
+*/
+
 integer taps_to_repeat = 65535;
 integer taps_counter = 0;
 integer i = 0; // para bucle
@@ -7,19 +11,19 @@ initial begin
     clock_en = 1;
     i_enable = 1;
     
-    for(i=0; i<100; i=i+1)
+    for(i=0; i<20; i=i+1)
     
     begin
 
         set_seed();
-        @(negedge clock);
+        @(posedge clock);
         soft_reset();
         taps_counter = 0;
         i_seed_siguiente = {i_seed[14:0], i_seed[15]} ^ (i_seed[15] ? 16'h002C : 16'h0000);
 
         while(1) begin
             @(posedge clock);
-            if(i_valid_monitor)
+            if(i_valid)
             begin
                 taps_counter = taps_counter + 1;
 

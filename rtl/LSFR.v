@@ -15,6 +15,7 @@ module LSFR
     input  wire [15:0] i_seed, //seed dinamica para i_soft_reset
 
     // ---> Outputs
+    output wire o_valid,
     output reg [15:0] LFSR
     
 );
@@ -55,6 +56,7 @@ module LSFR
         end
     end
 
+    assign o_valid = i_valid;
     assign feedback = LFSR[15];
 
 endmodule

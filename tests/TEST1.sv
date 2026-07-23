@@ -1,20 +1,25 @@
+/*
+TEST1: Dejamos correr y probamos los reset, lo comparamos con un modelo behavioral que calcula el próximo estado del LFSR matematicamente.
+*/
 reg [15:0] expected_LFSR = SEED;
 
 integer i=0; // para bucle
 initial begin
     
-    
+    valid_random_cycles = 1; //seteamos la flag para que valid sea random
     for(i=0; i<100; i=i+1)
     begin
         // Inicializamos las señale
         clock_en = 1;
         i_enable = 1;
-        @(negedge clock);
+        @(posedge clock);
+        #1;
         reset();
 
         #($urandom_range(50,500) * 1ns);
         set_seed();
-        @(negedge clock);
+        @(posedge clock);
+        #1;
         soft_reset();
 
         #($urandom_range(50,500) * 1ns);
@@ -36,7 +41,7 @@ always @(posedge clock or posedge i_rst) begin
         expected_LFSR = i_seed;
     end 
     // Solo evaluamos si el enable está activo y si el cable interno w_valid manda el pulso
-    else if (i_enable && i_valid_monitor) begin
+    else if (i_enable && i_valid) begin
         
         //  calculamos matematicamente cuál debería ser el próximo estado
         expected_LFSR = {expected_LFSR[14:0], expected_LFSR[15]} ^ (expected_LFSR[15] ? 16'h002C : 16'h0000);
@@ -55,11 +60,3 @@ always @(posedge clock or posedge i_rst) begin
         end
     end
 end
-
-
-always @(negedge clock) begin
-    
-    force u_top_LSFR.i_valid = $urandom_range(0, 1);
-
-end
-    
