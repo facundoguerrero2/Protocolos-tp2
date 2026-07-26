@@ -1,47 +1,80 @@
 `default_nettype none
 `timescale 1ns/1ns
+module top_lfsr_tb();
 
-module top_LFSR_tb();
-
+    // =========================================================================
+    // 1. COMUNES
+    // =========================================================================
     localparam PERIODO_CLK = 10;
-    localparam SEED = 16'hFFFF;
-    localparam NB_LFSR = 16;
-
-    reg                     i_enable;
-    reg                     i_rst;
-    reg                     i_soft_reset;
-    reg [NB_LFSR-1:0]       i_lfsr;
+    localparam NB_LFSR     = 16;
+    localparam ENABLE      = 1'b1;
+    localparam DISABLE     = 1'b0;
     reg                     clock;
     reg                     clock_en;  
-   
-    wire [NB_LFSR-1:0]        LFSR;
-    wire                    i_valid; // cable interno que conecta el valid_generator con el top_LFSR
+    reg                     i_rst;
+
+    // =========================================================================
+    // 2. GENERADOR 
+    // =========================================================================
+    localparam SEED = 16'hFFFF;
+    
+    reg                     i_gen_enable;
+    reg                     i_soft_reset;
+    reg [NB_LFSR-1:0]       i_seed;          // Declarado (faltaba en tu bloque de señales)
+    wire                    i_valid;         // Conectado al generador de valid
+
+    // ----> Salidas
+    wire [NB_LFSR-1:0]      o_lfsr;            // Salida de datos LFSR del top
+    wire                    o_gen_valid;     // Salida valid del generador
+
+
+    // =========================================================================
+    // 3. CHECKER (Control y Estado)
+    // =========================================================================
+    // ----> Inputs 
+    wire                    i_checker_enable; // Cable que conecta al checker del top
+    // ----> Outputs 
+    wire [NB_LFSR-1:0]      o_checker;       // Salida de datos del checker
+    wire                    o_locked;         // Salida de lock del checker
+
+
+
+    // =========================================================================
+    // 2. Valid 
+    // =========================================================================
+    parameter MIN_WAIT            = 1;
+    parameter MAX_WAIT            = 10;
+    parameter DEFAULT_WAIT_CYCLES = 1;
+    
+    reg [31:0]              valid_wait_cycles = DEFAULT_WAIT_CYCLES;
+    reg                     valid_random_cycles = 0; // Flag para habilitar aleatoriedad
+    reg [31:0]              valid_cicle_counter;     // Contador de ciclos
+    reg                     valid_signal;
+    
+    assign i_valid = valid_signal;
 
 
     
-    // Parámetros y registros del generador de valid
-
-    parameter MIN_WAIT = 1;  // Mínima cantidad de ciclos a esperar
-    parameter MAX_WAIT = 10; // Máxima cantidad de ciclos a esperar
-    parameter DEFAULT_WAIT_CYCLES = 1;
-    reg [31:0] valid_wait_cycles = 1;  // Variable que guarda el tiempo de espera actual
-    reg valid_random_cycles = 0; //flag para habilitar/deshabilitar la aleatoriedad en i_valid
-    reg [31:0] valid_cicle_counter;      // Contador de ciclos
-    reg valid_signal;            // señal para conectar al módulo
-
-    assign i_valid = valid_signal;
-
-    top_LFSR #(
-        .SEED(SEED),
-        .CYCLES(5)
-    ) u_top_LFSR (
-        .i_enable(i_enable),
-        .i_rst(i_rst),
-        .i_soft_reset(i_soft_reset),
-        .i_seed(i_seed),
-        .clock(clock),
-        .o_LFSR(LFSR),
-        .i_valid(i_valid)
+    top_LSFR #(
+        .SEED       (SEED),
+        .CYCLES     (5),
+        .LOCK_THR   (2),
+        .UNLOCK_THR (5)
+    ) u_top_lfsr (
+        // Comunes
+        .clock            (clock),
+        .i_rst            (i_rst),
+        // Generador
+        .i_gen_enable     (i_gen_enable),      // Conectado al reg i_enable del TB
+        .i_soft_reset     (i_soft_reset),
+        .i_seed           (i_seed),
+        .i_gen_valid      (i_valid),       // Conectado a la señal i_valid del TB (generada aleatoriamente)
+        .o_lfsr           (o_lfsr),
+        .o_gen_valid      (o_gen_valid),   // Conectado al wire i_gen_valid del TB
+        // Checker
+        .i_checker_enable (i_checker_enable),
+        .o_locked         (o_locked),
+        .o_checker        (o_checker)
     );
 
     

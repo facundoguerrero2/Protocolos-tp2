@@ -101,7 +101,7 @@ module top_LSFR_tb();
 
     
 
-    `define TEST1
+    `define TEST3
         
     `ifdef TEST_RAND_GENERATING
         `include "./TEST_RAND_GENERATING.sv"
@@ -114,6 +114,10 @@ module top_LSFR_tb();
 
     `ifdef TEST2
         `include "./TEST2.sv"
+    `endif
+    
+     `ifdef TEST3
+        `include "./TEST3.sv"
     `endif
 
 

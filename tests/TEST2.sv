@@ -1,5 +1,5 @@
 /*
-TEST2: Verificamos la periodicidad del LFSR.
+TEST2: Verificamos la periodicidad del lfsr.
 */
 
 integer taps_to_repeat = 65535;
@@ -29,15 +29,15 @@ initial begin
 
                 if(taps_counter == 1) begin
                     #1;
-                    if(LFSR !== i_seed_siguiente) begin
-                        $display("\n[!!!] ERROR: El LFSR quedó pegado en tiempo %0t [!!!]", $time);
-                        $display("      Hardware dio: %h", LFSR);
+                    if(o_lfsr !== i_seed_siguiente) begin
+                        $display("\n[!!!] ERROR: El lfsr quedó pegado en tiempo %0t [!!!]", $time);
+                        $display("      Hardware dio: %h", o_lfsr);
                         $display("      Debia dar:  %h", i_seed_siguiente);
                         $finish;
                     end 
                     else begin
                         // Si arrancó bien, imprimimos pero NO hacemos break. Dejamos que siga contando.
-                        $display("[PASO 1/65535 OK] Iteración %0d despego bien hacia: %h", i, LFSR);
+                        $display("[PASO 1/65535 OK] Iteración %0d despego bien hacia: %h", i, o_lfsr);
                     end
                 end
 
@@ -45,16 +45,16 @@ initial begin
                 if(taps_counter == taps_to_repeat) begin
                     
                     #1;
-                    if(LFSR !== i_seed)
+                    if(o_lfsr !== i_seed)
                     begin
                         $display("\n[!!!] ERROR no fue periodico en tiempo %0t [!!!]", $time);
-                        $display("      Hardware dio: %h", LFSR);
+                        $display("      Hardware dio: %h", o_lfsr);
                         $display("      Debia dar: %h", i_seed);
                         $finish; 
                     end 
                     else begin
                         // Si todo va bien imprime el valor exitoso
-                        $display("[PASO 65535/65535] [PERIODICIDAD OK] Tiempo %0t | LFSR Out: %h | SEED: %h", $time, LFSR, i_seed);
+                        $display("[PASO 65535/65535] [PERIODICIDAD OK] Tiempo %0t | lfsr Out: %h | SEED: %h", $time, o_lfsr, i_seed);
                         
                         taps_counter = 0;
                         break;

@@ -12,7 +12,7 @@ initial begin
     #1000;
     #3000;
 
-    // Pausamos el LFSR para probar el enable
+    // Pausamos el lfsr para probar el enable
     
     @(negedge clock);
     soft_reset();
@@ -37,6 +37,6 @@ end
 
 
 initial begin
-    $monitor("[It:%0d] Tiempo: %0t | Reset: %b | Enable: %b | LFSR Out: %h", 
-                iteration, $time, i_rst, i_enable, LFSR);
+    $monitor("[It:%0d] Tiempo: %0t | Reset: %b | Enable: %b | lfsr Out: %h", 
+                iteration, $time, i_rst, i_enable, lfsr);
 end

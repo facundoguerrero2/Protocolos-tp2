@@ -1,6 +1,4 @@
 
-
-
     always @(posedge clock) begin
         if (i_rst) begin
             

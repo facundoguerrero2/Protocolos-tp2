@@ -1,49 +1,56 @@
-integer taps_to_repeat = 65535;
-integer taps_counter = 0;
-integer i = 0; // para bucle
-initial begin
+
+integer i; // para iteraciones
+integer valid_cnt; //contador de validos 
+integer match_cnt; //contador de matches correctos
+reg [15:0] expected_lfsr;
+
+
+// =========================================================
+// 2. Tu bloque FOR actualizado
+// =========================================================
+for(i=0; i<20; i=i+1)
+begin
+    $display("\n--- ITERACION %0d ---", i);
     
-    clock_en = 1;
-    i_enable = 1;
+    reset();
+    
+    // Inicializamos variables para la iteración actual
+    match_cnt = 0;
+    valid_cnt = 0;
+    i_gen_enable = ENABLE; // Encendemos el generador LFSR
+    
+    // Esperamos un momento random y habilitamos el checker
+    #($urandom_range(50,500) * 1ns);
+    
+    @(posedge clock);
+    i_checker_enable = ENABLE; // prendemos el checker que no se prende al mismo tiempo que el LFSR
 
-    for(i=0; i<100; i=i+1)
-    begin
-        reset();
-        taps_counter = 0;
-        while(1) begin
-            @(posedge clock);
-            if(i_valid_monitor)
-            begin
-                taps_counter = taps_counter + 1;
+    $display("[%0t ns] Checker Habilitado", $time);
+
+    // Definimos cuántos valids queremos monitorear por iteración (ej: 20 valids)
+    while (valid_cnt < 20) begin
+        @(posedge clock);
+        
+        // Cada vez que sale un valid, comparamos el valor recibido con el esperado
+        if (o_gen_valid) begin 
+            valid_cnt = valid_cnt + 1;
             
-                if(taps_counter == taps_to_repeat) begin
-                    
-                    #1;
-                    if(LFSR !== SEED)
-                    begin
-                        $display("\n[!!!] ERROR no fue periodico en tiempo %0t [!!!]", $time);
-                        $display("      Hardware dio: %h", LFSR);
-                        $display("      Debia dar: %h", SEED);
-                        $finish; 
-                    end 
-                    else begin
-                        // Si todo va bien imprime el valor exitoso
-                        $display("[PERIODICIDAD OK] Tiempo %0t | LFSR Out: %h | SEED: %h", $time, LFSR, SEED);
-                        set_seed();
-                        soft_reset();
-                        taps_counter = 0;
-                        break;
-                    end
-                    
-                    
-                end
+            // Comparamos el dato recibido con la predicción del checker
+            if (o_lfsr == o_checker) begin
+                match_cnt = match_cnt + 1;
+                $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MATCH    | Matches totales: %0d", 
+                            $time, valid_cnt, o_lfsr, o_checker, match_cnt);
+                
+            end 
+            else begin
+                $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MISMATCH | Matches totales: %0d", 
+                            $time, valid_cnt, o_lfsr, o_checker, match_cnt);
             end
-            
-
         end
     end
-
-    $display("--- PERIODICIDAD COMPLETADA CON ÉXITO ---");
     
-    $finish;
+    // Apagamos todo antes de la próxima iteración
+    i_checker_enable = DISABLE;
+    i_gen_enable = DISABLE;
+    $finish; // Finalizamos la simulación después de 100 iteraciones
 end
