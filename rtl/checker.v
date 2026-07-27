@@ -37,16 +37,16 @@ module lfsr_checker #(
         
         if (i_rst) begin
             state      <= ST_UNLOCK;
-            lfsr_prox  <= lfsr_next(SEED);   // pre-calcular primer valor esperado
+            lfsr_prox  <= lfsr_next(i_lfsr);   // pre-calcular primer valor esperado
             cant_ok    <= 3'd0;
             cant_err   <= 3'd0;
             o_lock     <= 1'b0;
-            o_error    <= 1'b0;
+            //o_error    <= 1'b0;
         end 
         
         else
         begin
-            o_error <= 1'b0;   // valor por defecto: sin error
+           // o_error <= 1'b0;   // valor por defecto: sin error
 
             if (i_valid) begin
 
@@ -90,7 +90,7 @@ module lfsr_checker #(
                         else    // Fallo detectado
                         begin    
                             
-                            cant_err <= cant_err + 3 me'd1;
+                            cant_err <= cant_err + 3'd1;
                             //o_error  <= 1'b1; // Señala error durante este ciclo
                             
                             if (cant_err + 3'd1 >= UNLOCK_THR)   // Demasiados fallos consecutivos → UNLOCK
@@ -113,7 +113,7 @@ module lfsr_checker #(
     assign o_checker = lfsr_prox;
 
 endmodule
-```
+
 
 
 //TEST

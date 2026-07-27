@@ -32,7 +32,7 @@ module top_lfsr_tb();
     // 3. CHECKER (Control y Estado)
     // =========================================================================
     // ----> Inputs 
-    wire                    i_checker_enable; // Cable que conecta al checker del top
+    reg                    i_checker_enable; // Cable que conecta al checker del top
     // ----> Outputs 
     wire [NB_LFSR-1:0]      o_checker;       // Salida de datos del checker
     wire                    o_locked;         // Salida de lock del checker
@@ -134,7 +134,7 @@ module top_lfsr_tb();
 
     
 
-    `define TEST1
+    `define TEST3
         
     `ifdef TEST_RAND_GENERATING
         `include "./TEST_RAND_GENERATING.sv"
@@ -148,7 +148,10 @@ module top_lfsr_tb();
     `ifdef TEST2
         `include "./TEST2.sv"
     `endif
-
+    
+    `ifdef TEST3
+        `include "./TEST3.sv"
+    `endif
 
 
 

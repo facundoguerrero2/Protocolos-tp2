@@ -51,7 +51,7 @@ module top_LSFR
         .i_seed       (i_seed),
         
         // Outputs (Se conectan directamente a las salidas del top)
-        .lfsr         (o_lfsr),
+        .o_lfsr         (o_lfsr),
         .o_valid      (o_gen_valid)
     );
 
