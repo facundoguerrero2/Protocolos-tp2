@@ -48,7 +48,7 @@ module lfsr_checker #(
         begin
            // o_error <= 1'b0;   // valor por defecto: sin error
 
-            if (i_valid) begin
+            if (i_valid && i_enable) begin
 
                 case (state)
 

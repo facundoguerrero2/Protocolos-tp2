@@ -1,4 +1,11 @@
+/**
+Test simple de comportamiento esperado, para verificar que el checker funcione correctamente en condiciones normales.
+20 iteraciones de reset, habilitación del LFSR, espera de tiempo random y habilitacion del checker, comparación de los valores generados con los esperados.
+se comparan 20 valids por iteración, y se reporta el total de matches correctos al final de cada iteración.
 
+se espera que el total de matches correctos sea igual a 19, ya que el primero deberia ser MISMATCH porque es el dato que se toma como ancla para la proxima palabra.
+a partir del segundo dato deberia ser siempre MATCH, ya que el checker deberia predecir correctamente el siguiente valor del LFSR.
+*/
 integer i = 0; // para iteraciones
 integer valid_cnt = 0; //contador de validos 
 integer match_cnt = 0; //contador de matches correctos
@@ -32,7 +39,6 @@ begin
 
         // Definimos cuántos valids queremos monitorear por iteración (ej: 20 valids)
         while (valid_cnt < 20) begin
-            @(posedge clock);
             
             // Cada vez que sale un valid, comparamos el valor recibido con el esperado
             if (o_gen_valid) begin 
@@ -50,6 +56,8 @@ begin
                                 $time, valid_cnt, o_lfsr, o_checker, match_cnt);
                 end
             end
+
+            @(posedge clock);
         end
         
         // Apagamos todo antes de la próxima iteración
