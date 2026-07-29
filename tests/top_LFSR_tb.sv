@@ -31,11 +31,16 @@ module top_lfsr_tb();
     // =========================================================================
     // 3. CHECKER (Control y Estado)
     // =========================================================================
+    localparam LOCK_THR   = 2;
+    localparam UNLOCK_THR = 5;
     // ----> Inputs 
     reg                    i_checker_enable; // Cable que conecta al checker del top
     // ----> Outputs 
     wire [NB_LFSR-1:0]      o_checker;       // Salida de datos del checker
     wire                    o_lock;         // Salida de lock del checker
+    
+    wire [15:0] i_checker_data;  assign i_checker_data = queue_data_out; // Conectamos la salida de datos de la cola al puerto de entrada del checker
+    wire        i_checker_valid; assign i_checker_valid = queue_valid_out; // Conectamos la salida valid de la cola al puerto de entrada del checker
 
 
 
@@ -58,8 +63,8 @@ module top_lfsr_tb();
     top_LSFR #(
         .SEED       (SEED),
         .CYCLES     (5),
-        .LOCK_THR   (2),
-        .UNLOCK_THR (5)
+        .LOCK_THR   (LOCK_THR),
+        .UNLOCK_THR (UNLOCK_THR)
     ) u_top_lfsr (
         // Comunes
         .clock            (clock),
@@ -73,12 +78,19 @@ module top_lfsr_tb();
         .o_gen_valid      (o_gen_valid),   // Conectado al wire i_gen_valid del TB
         // Checker
         .i_checker_enable (i_checker_enable),
-        .o_lock         (o_lock),
+        .i_checker_valid  (queue_valid_out), // Conectado a la salida valid de la cola
+        .i_checker_data   (queue_data_out),  // Conectado a la salida de datos de la cola
+        .o_lock           (o_lock),
         .o_checker        (o_checker)
     );
 
-    
-    
+     // =========================================================================
+    // 3. Contadores para el monitoreo de lock/unlock
+    // =========================================================================
+    int lock_cnt = 0;
+    int unlock_cnt = 0;
+    reg prev_lock;
+
     initial
     begin
         clock   <= 'd0;
@@ -130,9 +142,40 @@ module top_lfsr_tb();
         end
     endtask
 
-    `include "./valid_generator.sv"
+
 
     
+    // 2. Monitoreo constante de o_lock
+    initial begin
+        prev_lock = 0;
+        forever begin
+            @(posedge clock);
+            if (o_lock !== prev_lock) begin // Asumiendo que o_checker es la salida o_lock o que tienes un o_lock
+            
+                if (o_lock == 1'b1)
+                begin
+                    $display("[%0t ns] LOCK: El estado de lock cambió a %b", $time, o_lock);
+                    lock_cnt++;
+                end
+                else
+                begin
+                    $display("[%0t ns] UNLOCK: El estado de lock cambió a %b", $time, o_lock);
+                    unlock_cnt++;
+                end
+                prev_lock = o_lock;
+            end
+        end
+    end
+
+
+
+    `include "./valid_generator.sv"
+
+    `include "./queue.sv"
+
+
+
+
 
     `define TEST3
         

@@ -29,7 +29,10 @@ module top_LSFR
         // 3. CHECKER
         // ==========================================
         // ----> Inputs
+        //HAY QUE ABRIR EL TOP AL EXTERIOR PARA PODER CONECTAR EL CHECKER A LA COLA DE DATOS DEL TESTBENCH
         input  wire        i_checker_enable,  
+        input wire         i_checker_valid,   // Entrada de valid del checker (no se usa en este caso)
+        input wire [15:0]  i_checker_data,    // Entrada de datos del checker (no se usa en este caso)
         
         // ----> Outputs 
         output wire [15:0] o_checker,         // Salida de datos del checker
@@ -70,8 +73,8 @@ module top_LSFR
         .i_enable     (i_checker_enable),
         
         // Entradas de datos provenientes del generador
-        .i_valid      (o_gen_valid), // Conectado a la salida valid del generador
-        .i_lfsr       (o_lfsr),  // Conectado a la salida de datos del generador
+        .i_valid      (i_checker_valid), // Conectado a la salida valid del generador
+        .i_lfsr       (i_checker_data),  // Conectado a la salida de datos del generador
         
         // Outputs
         .o_checker     (o_checker), // Salida de datos del checker hacia el exterior
