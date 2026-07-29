@@ -35,7 +35,7 @@ module top_lfsr_tb();
     reg                    i_checker_enable; // Cable que conecta al checker del top
     // ----> Outputs 
     wire [NB_LFSR-1:0]      o_checker;       // Salida de datos del checker
-    wire                    o_locked;         // Salida de lock del checker
+    wire                    o_lock;         // Salida de lock del checker
 
 
 
@@ -73,7 +73,7 @@ module top_lfsr_tb();
         .o_gen_valid      (o_gen_valid),   // Conectado al wire i_gen_valid del TB
         // Checker
         .i_checker_enable (i_checker_enable),
-        .o_locked         (o_locked),
+        .o_lock         (o_lock),
         .o_checker        (o_checker)
     );
 

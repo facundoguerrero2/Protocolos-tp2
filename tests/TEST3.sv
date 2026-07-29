@@ -47,13 +47,13 @@ begin
                 // Comparamos el dato recibido con la predicción del checker
                 if (o_lfsr == o_checker) begin
                     match_cnt = match_cnt + 1;
-                    $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MATCH    | Matches totales: %0d", 
-                                $time, valid_cnt, o_lfsr, o_checker, match_cnt);
+                    $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MATCH    | Matches totales: %0d  |  Lock: %b", 
+                                $time, valid_cnt, o_lfsr, o_checker, match_cnt, o_lock);
                     
                 end 
                 else begin
-                    $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MISMATCH | Matches totales: %0d", 
-                                $time, valid_cnt, o_lfsr, o_checker, match_cnt);
+                    $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MISMATCH | Matches totales: %0d  |  Lock: %b", 
+                                $time, valid_cnt, o_lfsr, o_checker, match_cnt, o_lock);
                 end
             end
 

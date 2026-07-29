@@ -33,7 +33,7 @@ module top_LSFR
         
         // ----> Outputs 
         output wire [15:0] o_checker,         // Salida de datos del checker
-        output wire        o_locked           // Estado de sincronía (lock) del checker
+        output wire        o_lock          // Estado de sincronía (lock) del checker
     );
 
     // =========================================================================
@@ -75,6 +75,6 @@ module top_LSFR
         
         // Outputs
         .o_checker     (o_checker), // Salida de datos del checker hacia el exterior
-        .o_lock       (o_locked) // Salida de lock hacia el exterior
+        .o_lock       (o_lock) // Salida de lock hacia el exterior
     );
 endmodule
