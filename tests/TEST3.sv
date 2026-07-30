@@ -1,66 +1,31 @@
 /**
 Test simple de comportamiento esperado, para verificar que el checker funcione correctamente en condiciones normales.
 20 iteraciones de reset, habilitación del LFSR, espera de tiempo random y habilitacion del checker, comparación de los valores generados con los esperados.
-se comparan 20 valids por iteración, y se reporta el total de matches correctos al final de cada iteración.
+se comparan 50 valids por iteración, y se reporta el total de matches correctos al final de cada iteración.
 
-se espera que el total de matches correctos sea igual a 19, ya que el primero deberia ser MISMATCH porque es el dato que se toma como ancla para la proxima palabra.
+se espera que el total de matches correctos sea igual a n-1, ya que el primero deberia ser MISMATCH porque es el dato que se toma como ancla para la proxima palabra.
 a partir del segundo dato deberia ser siempre MATCH, ya que el checker deberia predecir correctamente el siguiente valor del LFSR.
 */
+
 integer i = 0; // para iteraciones
-integer valid_cnt = 0; //contador de validos 
-integer match_cnt = 0; //contador de matches correctos
-
-
 initial 
 begin
     clock_en = 1;
     for(i=0; i<20; i=i+1)
     begin
-        $display("\n--- ITERACION %0d ---", i);
-        
         reset();
+        i_gen_enable = ENABLE; 
         
-        // Inicializamos variables para la iteración actual
-        match_cnt = 0;
-        valid_cnt = 0;
-        i_gen_enable = ENABLE; // Encendemos el generador LFSR
-        
-        // Esperamos un momento random y habilitamos el checker
         #($urandom_range(50,500) * 1ns);
         
         @(posedge clock);
-        i_checker_enable = ENABLE; // prendemos el checker que no se prende al mismo tiempo que el LFSR
-
+        i_checker_enable = ENABLE; 
         $display("[%0t ns] Checker Habilitado", $time);
-
-        // Definimos cuántos valids queremos monitorear por iteración (ej: 20 valids)
-        while (valid_cnt < 50) begin
-            
-            // Cada vez que sale un valid, comparamos el valor recibido con el esperado
-            if (i_checker_valid) begin 
-                valid_cnt = valid_cnt + 1;
-                
-                // Comparamos el dato recibido con la predicción del checker
-                if (i_checker_data == o_checker) begin
-                    match_cnt = match_cnt + 1;
-                    $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MATCH    | Matches totales: %0d  |  Lock: %b", 
-                                $time, valid_cnt, i_checker_data, o_checker, match_cnt, o_lock);
-                    
-                end 
-                else begin
-                    $display("[%0t ns] Valid #%0d | Recibido: %h | Checker: %h | MISMATCH | Matches totales: %0d  |  Lock: %b", 
-                                $time, valid_cnt, i_checker_data, o_checker, match_cnt, o_lock);
-                end
-            end
-
-            @(posedge clock);
-        end
+        // ¡Usamos la tarea modular!
+        monitor_valids(50, $sformatf("TEST 3 -ITERACION %0d", i));
         
-        // Apagamos todo antes de la próxima iteración
         i_checker_enable = DISABLE;
         i_gen_enable = DISABLE;
-       
     end
-    $display ("Test finalizado. Cant Match %0d | Cant MISMATCH %0d", match_cnt, valid_cnt - match_cnt);
-     $finish; // Finalizamos la simulación después de 100 iteraciones
-end
+    $finish;
+end 

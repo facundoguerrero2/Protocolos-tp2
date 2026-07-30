@@ -31,21 +31,21 @@ module top_lfsr_tb();
     // =========================================================================
     // 3. CHECKER (Control y Estado)
     // =========================================================================
-    localparam LOCK_THR   = 2;
-    localparam UNLOCK_THR = 5;
+    localparam LOCK_THR   = 5;
+    localparam UNLOCK_THR = 2;
     // ----> Inputs 
     reg                    i_checker_enable; // Cable que conecta al checker del top
     // ----> Outputs 
     wire [NB_LFSR-1:0]      o_checker;       // Salida de datos del checker
     wire                    o_lock;         // Salida de lock del checker
-    
+
     wire [15:0] i_checker_data;  assign i_checker_data = queue_data_out; // Conectamos la salida de datos de la cola al puerto de entrada del checker
     wire        i_checker_valid; assign i_checker_valid = queue_valid_out; // Conectamos la salida valid de la cola al puerto de entrada del checker
 
 
 
     // =========================================================================
-    // 2. Valid 
+    // Valid 
     // =========================================================================
     parameter MIN_WAIT            = 1;
     parameter MAX_WAIT            = 10;
@@ -85,11 +85,19 @@ module top_lfsr_tb();
     );
 
      // =========================================================================
-    // 3. Contadores para el monitoreo de lock/unlock
+    // Contadores para el monitoreo de lock/unlock
     // =========================================================================
     int lock_cnt = 0;
     int unlock_cnt = 0;
     reg prev_lock;
+
+
+    // =========================================================================
+    // Contadores para el monitoreo match/mismatch
+    // =========================================================================
+    integer i = 0; // para iteraciones
+    integer valid_cnt = 0; //contador de validos 
+    integer match_cnt = 0; //contador de matches correctos
 
     initial
     begin
@@ -143,9 +151,55 @@ module top_lfsr_tb();
     endtask
 
 
+    // Monitor Inteligente de Valids
+    task monitor_valids(input integer max_valids, input string test_name);
+        begin
+            valid_cnt = 0;
+            match_cnt = 0;
+            $display("\n--------- %s ---------", test_name);
+            
+            while (valid_cnt < max_valids) begin
+                // Usamos i_checker_valid porque queremos monitorear lo que sale del Pipe
+                if (i_checker_valid) begin 
+                    valid_cnt = valid_cnt + 1;
+                    
+                    if (i_checker_data == o_checker) begin //i_checker_data es lo que le llega al checker y o_checker es lo que el checker predijo para ese ciclo
+                        match_cnt = match_cnt + 1;
+                        $display("[%0t ns] Valid #%0d | Generador: %h | Recibido: %h | Checker: %h | MATCH    | Matches totales: %0d  |  Lock: %b", 
+                                $time, valid_cnt, o_lfsr, i_checker_data, o_checker, match_cnt, o_lock);
+                    end else begin
+                        $display("[%0t ns] Valid #%0d | Generador: %h | Recibido: %h | Checker: %h | MISMATCH | Matches totales: %0d  |  Lock: %b", 
+                                    $time, valid_cnt, o_lfsr, i_checker_data, o_checker, match_cnt, o_lock);
+                    end
+                end
+                @(posedge clock);
+            end
+        end
+    endtask
+
+    // Inyector de Errores (Se usa con fork/join_any)
+    task error_injector(input integer num_good, input integer num_bad);
+        begin
+            // Bucle infinito: intercala N datos sanos con M datos corruptos
+            while(1) begin
+                repeat(num_good) begin
+                    inject_error = 0;
+                    @(posedge clock);
+                    while(!o_gen_valid) 
+                        @(posedge clock); // Esperamos a que salga un dato real
+                end
+                repeat(num_bad) begin
+                    inject_error = 1;
+                    @(posedge clock);
+                    while(!o_gen_valid) 
+                        @(posedge clock);
+                end
+            end
+        end
+    endtask
 
     
-    // 2. Monitoreo constante de o_lock
+    // 2. Proceso de Monitoreo constante de o_lock
     initial begin
         prev_lock = 0;
         forever begin
@@ -167,6 +221,8 @@ module top_lfsr_tb();
         end
     end
 
+
+    
 
 
     `include "./valid_generator.sv"
