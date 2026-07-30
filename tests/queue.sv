@@ -35,7 +35,7 @@ always @(posedge clock) begin
         // delay_queue.size() nos dice cuántos elementos hay guardados.
         // $urandom_range(1, 100) <= 30) es un "sorteo" para decidir si sacamos un dato o no (30% de probabilidad) esto mete delay 
         // de cantidad de ciclos aleatorios que le tome ganar el sorteo.
-        if (i_checker_enable && delay_queue.size() > 0 && ($urandom_range(1, 30) <= 100)) begin 
+        if (i_checker_enable && delay_queue.size() > 0 && ($urandom_range(1, 100) <= 30)) begin 
             // Hay datos y ganamos el sorteo
             queue_data_out  <= delay_queue.pop_front(); // Sacamos el más viejo
             queue_valid_out <= 1'b1;                    // Le avisamos al checker que hay dato

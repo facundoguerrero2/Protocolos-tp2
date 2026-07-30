@@ -21,7 +21,7 @@ module top_lfsr_tb();
     reg                     i_gen_enable;
     reg                     i_soft_reset;
     reg [NB_LFSR-1:0]       i_seed;          // Declarado (faltaba en tu bloque de señales)
-    wire                    i_valid;         // Conectado al generador de valid
+    wire                    i_gen_valid;         // Conectado al generador de valid
 
     // ----> Salidas
     wire [NB_LFSR-1:0]      o_lfsr;            // Salida de datos LFSR del top
@@ -31,8 +31,8 @@ module top_lfsr_tb();
     // =========================================================================
     // 3. CHECKER (Control y Estado)
     // =========================================================================
-    localparam LOCK_THR   = 5;
-    localparam UNLOCK_THR = 2;
+    localparam LOCK_THR   = 5; //cuantos datos buenos consecutivos se necesitan para que el checker se lockee
+    localparam UNLOCK_THR = 3; //cuantos datos malos consecutivos se necesitan para que el checker se desbloquee
     // ----> Inputs 
     reg                    i_checker_enable; // Cable que conecta al checker del top
     // ----> Outputs 
@@ -52,11 +52,11 @@ module top_lfsr_tb();
     parameter DEFAULT_WAIT_CYCLES = 1;
     
     reg [31:0]              valid_wait_cycles = DEFAULT_WAIT_CYCLES;
-    reg                     valid_random_cycles = 0; // Flag para habilitar aleatoriedad
+    reg                     valid_random_cycles = 1; // Flag para habilitar aleatoriedad
     reg [31:0]              valid_cicle_counter;     // Contador de ciclos
     reg                     valid_signal;
     
-    assign i_valid = valid_signal;
+    assign i_gen_valid = valid_signal;
 
 
     
@@ -73,7 +73,7 @@ module top_lfsr_tb();
         .i_gen_enable     (i_gen_enable),      // Conectado al reg i_enable del TB
         .i_soft_reset     (i_soft_reset),
         .i_seed           (i_seed),
-        .i_gen_valid      (i_valid),       // Conectado a la señal i_valid del TB (generada aleatoriamente)
+        .i_gen_valid      (i_gen_valid),       // Conectado a la señal i_gen_valid del TB (generada aleatoriamente)
         .o_lfsr           (o_lfsr),
         .o_gen_valid      (o_gen_valid),   // Conectado al wire i_gen_valid del TB
         // Checker
@@ -204,7 +204,7 @@ module top_lfsr_tb();
         prev_lock = 0;
         forever begin
             @(posedge clock);
-            if (o_lock !== prev_lock) begin // Asumiendo que o_checker es la salida o_lock o que tienes un o_lock
+            if (o_lock !== prev_lock) begin 
             
                 if (o_lock == 1'b1)
                 begin
@@ -223,17 +223,14 @@ module top_lfsr_tb();
 
 
     
-
-
     `include "./valid_generator.sv"
-
     `include "./queue.sv"
 
 
 
 
 
-    `define TEST3
+    `define TEST4
         
     `ifdef TEST_RAND_GENERATING
         `include "./TEST_RAND_GENERATING.sv"
@@ -250,6 +247,10 @@ module top_lfsr_tb();
     
     `ifdef TEST3
         `include "./TEST3.sv"
+    `endif
+
+    `ifdef TEST4
+        `include "./TEST4.sv"
     `endif
 
 

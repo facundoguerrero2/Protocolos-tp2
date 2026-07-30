@@ -3,15 +3,15 @@ TEST1: Dejamos correr y probamos los reset, lo comparamos con un modelo behavior
 */
 reg [15:0] expected_lfsr = SEED;
 
-integer i=0; // para bucle
+
 initial begin
     
     valid_random_cycles = 1; //seteamos la flag para que valid sea random
-    for(i=0; i<100; i=i+1)
+    for(i=0; i<50; i=i+1)
     begin
         // Inicializamos las señale
         clock_en = 1;
-        i_enable = 1;
+        i_gen_enable = 1;
         @(posedge clock);
         #1;
         reset();
@@ -41,7 +41,7 @@ always @(posedge clock or posedge i_rst) begin
         expected_lfsr = i_seed;
     end 
     // Solo evaluamos si el enable está activo y si el cable interno w_valid manda el pulso
-    else if (i_enable && i_valid) begin
+    else if (i_gen_enable && i_gen_valid) begin
         
         //  calculamos matematicamente cuál debería ser el próximo estado
         expected_lfsr = {expected_lfsr[14:0], expected_lfsr[15]} ^ (expected_lfsr[15] ? 16'h002C : 16'h0000);

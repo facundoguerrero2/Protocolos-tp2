@@ -9,7 +9,7 @@ reg [15:0] i_seed_siguiente;
 initial begin
     
     clock_en = 1;
-    i_enable = 1;
+    i_gen_enable = 1;
     
     for(i=0; i<20; i=i+1)
     
@@ -23,7 +23,7 @@ initial begin
 
         while(1) begin
             @(posedge clock);
-            if(i_valid)
+            if(i_gen_valid)
             begin
                 taps_counter = taps_counter + 1;
 
