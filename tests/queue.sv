@@ -1,5 +1,5 @@
 
-reg        inject_error;
+reg        inject_error = 0;
 
 
 // Declaración de Queue 

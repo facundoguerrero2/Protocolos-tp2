@@ -183,12 +183,14 @@ module top_lfsr_tb();
             // Bucle infinito: intercala N datos sanos con M datos corruptos
             while(1) begin
                 repeat(num_good) begin
+                    #1;
                     inject_error = 0;
                     @(posedge clock);
                     while(!o_gen_valid) 
                         @(posedge clock); // Esperamos a que salga un dato real
                 end
                 repeat(num_bad) begin
+                    #1;
                     inject_error = 1;
                     @(posedge clock);
                     while(!o_gen_valid) 
@@ -230,7 +232,7 @@ module top_lfsr_tb();
 
 
 
-    `define TEST4
+    `define TEST5
         
     `ifdef TEST_RAND_GENERATING
         `include "./TEST_RAND_GENERATING.sv"
@@ -251,6 +253,10 @@ module top_lfsr_tb();
 
     `ifdef TEST4
         `include "./TEST4.sv"
+    `endif
+
+    `ifdef TEST5
+        `include "./TEST5.sv"
     `endif
 
 
