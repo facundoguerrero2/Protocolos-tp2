@@ -31,6 +31,7 @@ module top_LSFR
         // ----> Inputs
         //HAY QUE ABRIR EL TOP AL EXTERIOR PARA PODER CONECTAR EL CHECKER A LA COLA DE DATOS DEL TESTBENCH
         input  wire        i_checker_enable,  
+        input wire         i_rst_checker, // Reset del checker 
         input wire         i_checker_valid,   // Entrada de valid del checker (no se usa en este caso)
         input wire [15:0]  i_checker_data,    // Entrada de datos del checker (no se usa en este caso)
         
@@ -69,7 +70,7 @@ module top_LSFR
     ) u_checker (
         // Inputs
         .clock        (clock),
-        .i_rst        (i_rst),
+        .i_rst        (i_rst_checker),
         .i_enable     (i_checker_enable),
         
         // Entradas de datos provenientes del generador

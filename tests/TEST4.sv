@@ -22,6 +22,7 @@ begin
         // -------------------------------------------------------------------------
 
         reset();
+        reset_checker();
         i_gen_enable = ENABLE; 
         
         // Abrimos hilos con inyector de errores
@@ -37,7 +38,7 @@ begin
                 i_checker_enable = ENABLE; 
                 monitor_valids(30, "TEST4-A NUNCA LOCK"); //testeamos 20 datos, deberia ver 2 MISMATCH seguidos y nunca lockear
                 // vemos si se lockeo o no
-                if (o_lock == 1'b1) begin
+                if (o_lock !== 1'b0) begin
                     $error("[%0t ns] FALLO: El checker se lockeó y no debía.", $time);
                     $finish;
                 end else begin
@@ -60,6 +61,7 @@ begin
         // TEST B : Nunca se desbloquee (Inyectamos menos datos malos que el UNLOCK_THR)
         // -------------------------------------------------------------------------
         reset();
+        reset_checker();
         i_gen_enable = ENABLE; 
         i_checker_enable = ENABLE; 
         
@@ -71,11 +73,11 @@ begin
             error_injector(5, UNLOCK_THR-1); // 5 buenos, 2 Corruptos
             begin
                 monitor_valids(30, "TEST4-B NUNCA UNLOCK (Fase de inyección de errores)");
-                if (o_lock == 1'b0) begin
+                if (o_lock !== 1'b1 ) begin
                     $error("[%0t ns] FALLO: El checker perdió el lock y no debía.", $time);
                     $finish;
-                end else begin
-                    $display("[%0t ns] EXITO: El checker retuvo el lock exitosamente.", $time);
+                end else begin //else if porque o_lock puede ser X y seguir funcionando, pero no deberia serlo
+                    $display("[%0t ns] EXITO: El checker soportó la prueba Nunca Lock.", $time);
                 end
             end
         join_any

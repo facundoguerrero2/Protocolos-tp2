@@ -14,6 +14,7 @@ begin
     for(i=0; i<20; i=i+1)
     begin
         reset();
+        reset_checker();
         i_gen_enable = ENABLE; 
         
         #($urandom_range(50,500) * 1ns);

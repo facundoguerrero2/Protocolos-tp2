@@ -30,6 +30,7 @@ begin
         $display("=======================================================");
 
         reset();
+        reset_checker();
         i_gen_enable = ENABLE; 
         lock_cnt = 0;
         unlock_cnt = 0;

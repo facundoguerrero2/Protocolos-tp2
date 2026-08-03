@@ -35,6 +35,7 @@ module top_lfsr_tb();
     localparam UNLOCK_THR = 3; //cuantos datos malos consecutivos se necesitan para que el checker se desbloquee
     // ----> Inputs 
     reg                    i_checker_enable; // Cable que conecta al checker del top
+    reg                    i_rst_checker;    // Reset del checker
     // ----> Outputs 
     wire [NB_LFSR-1:0]      o_checker;       // Salida de datos del checker
     wire                    o_lock;         // Salida de lock del checker
@@ -78,6 +79,7 @@ module top_lfsr_tb();
         .o_gen_valid      (o_gen_valid),   // Conectado al wire i_gen_valid del TB
         // Checker
         .i_checker_enable (i_checker_enable),
+        .i_rst_checker    (i_rst_checker),
         .i_checker_valid  (queue_valid_out), // Conectado a la salida valid de la cola
         .i_checker_data   (queue_data_out),  // Conectado a la salida de datos de la cola
         .o_lock           (o_lock),
@@ -147,6 +149,26 @@ module top_lfsr_tb();
             i_seed = $urandom_range(1, 2**NB_LFSR-1); //numero random de 16 bits para el puerto de seed
             #1; 
             $display("Puerto de Seed seteado a: %h", i_seed);
+        end
+    endtask
+
+
+    task reset_checker();
+        time reset_time;
+        begin
+            $display("Reset Checker.");
+            //----> Activo reset
+            i_rst_checker <= 'd1;
+
+            //----> Randomizo duracion del reset
+            reset_time = $urandom_range(1,249) * 1ns;
+            #reset_time;
+
+            //----> Bajo reset de manera sincronica
+            @(posedge clock); // esta linea sirve para esperar a que el clock haga un flanco positivo y luego levantar el reset
+
+            //----> Bajo reset
+            i_rst_checker <= 'd0; 
         end
     endtask
 
@@ -232,7 +254,7 @@ module top_lfsr_tb();
 
 
 
-    `define TEST5
+    `define TEST6
         
     `ifdef TEST_RAND_GENERATING
         `include "./TEST_RAND_GENERATING.sv"
@@ -257,6 +279,10 @@ module top_lfsr_tb();
 
     `ifdef TEST5
         `include "./TEST5.sv"
+    `endif
+
+    `ifdef TEST6
+        `include "./TEST6.sv"
     `endif
 
 
