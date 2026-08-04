@@ -254,7 +254,7 @@ module top_lfsr_tb();
 
 
 
-    `define TEST6
+    `define TEST7
         
     `ifdef TEST_RAND_GENERATING
         `include "./TEST_RAND_GENERATING.sv"
@@ -283,6 +283,10 @@ module top_lfsr_tb();
 
     `ifdef TEST6
         `include "./TEST6.sv"
+    `endif
+    
+    `ifdef TEST7
+        `include "./TEST7.sv"
     `endif
 
 
