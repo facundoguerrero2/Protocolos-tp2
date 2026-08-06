@@ -28,6 +28,7 @@ begin
         // Abrimos hilos con inyector de errores
         fork
             // Hilo 1:  inyector de errores
+            //metemos LOCK_THR-1 datos buenos para que no llegue a lockear
             error_injector(LOCK_THR-1, 1); 
             
             
@@ -66,10 +67,12 @@ begin
         i_checker_enable = ENABLE; 
         
         // Primero dejamos que se lockee 
+        // metemos LOCK_THR+1 datos buenos para que lockee
         monitor_valids(LOCK_THR +1 , "TEST4-B NUNCA UNLOCK (Fase de anclaje)"); //LOCK_THR+1 (el primero siempre es MISMATCH)
         
         // Ahora que está en lockeado, empezamos a meter errores 
         fork
+            //metemos UNLOCK_THR-1 datos corruptos para que no llegue a deslockearse.
             error_injector(5, UNLOCK_THR-1); // 5 buenos, 2 Corruptos
             begin
                 monitor_valids(30, "TEST4-B NUNCA UNLOCK (Fase de inyección de errores)");

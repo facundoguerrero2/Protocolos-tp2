@@ -55,7 +55,7 @@ always @(posedge clock or posedge i_rst) begin
             $finish; // Clava la simulación en la ventana de ondas justo donde falló
         end 
         else begin
-            // Si todo va bien, imprimimos el valor exitoso (esto reemplaza a tu $monitor viejo)
+            // Si todo va bien, imprimimos el valor exitoso 
             $display("[CHECK OK] Tiempo %0t | lfsr Out: %h", $time, o_lfsr);
         end
     end

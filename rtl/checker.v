@@ -37,7 +37,7 @@ module lfsr_checker #(
         
         if (i_rst) begin
             state      <= ST_UNLOCK;
-            lfsr_prox  <= lfsr_next(i_lfsr);   // pre-calcular primer valor esperado
+            lfsr_prox  <= 16'h0000;   // valor fijo cuando se resetea
             cant_ok    <= 3'd0;
             cant_err   <= 3'd0;
             o_lock     <= 1'b0;

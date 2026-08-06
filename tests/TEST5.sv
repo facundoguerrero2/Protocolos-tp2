@@ -21,7 +21,7 @@ localparam VALIDS_A_MONITOREAR = VALIDS_POR_VUELTA * (CANT_VUELTAS);
 initial 
 begin
     
-    for(i=0; i<10; i=i+1)
+    for(i=0; i<100; i=i+1)
     begin
         clock_en = 1;
         

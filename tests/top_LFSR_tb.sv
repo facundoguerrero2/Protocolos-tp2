@@ -20,7 +20,7 @@ module top_lfsr_tb();
     
     reg                     i_gen_enable;
     reg                     i_soft_reset;
-    reg [NB_LFSR-1:0]       i_seed;          // Declarado (faltaba en tu bloque de señales)
+    reg [NB_LFSR-1:0]       i_seed;         
     wire                    i_gen_valid;         // Conectado al generador de valid
 
     // ----> Salidas
